@@ -1,0 +1,36 @@
+http://www.metalsmarket.net/get_data.php?ms=0&sid=<sid>&rand=<new Date().getTime()>
+
+sid = session id, obtained from login as cookie header
+Set-Cookie: datamet_sid=<sid>
+
+res.headers["set-cookie"] = [
+  'datamet_sid=5E69D94803D2295D655C33A075B8B920',
+  'datamet_data=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT'
+]
+
+login.php responds with 302 if login succeeds
+- sends the above Set-Cookie header with the new sid
+
+if not:
+- it responds with 200 with the entire homepage
+- in it with an error message
+
+get_data.php returns 200
+- if sid is invalid, response body is `invalidSession();`
+
+in function pageLoad(page)
+- comment out $(obj).hide()
+- to keep cells visible as they get filled
+
+function dataProcess3(val)
+- fills cells one by one
+- add breakpoint in loop
+
+# Ids served from get_data.php
+LME OFFICIAL CURRENCY CONVERSIONS
+EUR/USD 9351 9382 9384
+GBP/USD 9415 9446 9448
+
+LONDON METAL EXCHANGE CASH / 3 MONTHS OFFICIAL SETTLEMENT PRICES
+DATE	METAL	CASH BID	CASH ASK	3M BID	3M ASK
+21288	ALUM	21255		21256		21959	21960

@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "target": "es6",
+    "checkJs": true
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
