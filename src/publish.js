@@ -35,12 +35,14 @@ async function clearIfDuplicate(rows, sheets) {
 	}
 }
 
+const digits = /\d+/g;
+
 /** @param {string} range
   * @returns {string} */
 function previousRange(range) {
-	const digits = range.match(/\d+/);
-	if (digits) {
-		const row = digits[0];
+	const matched = range.match(digits);
+	if (matched) {
+		const row = matched.at(-1);
 		return range.split(row).join(row - 1);
 	}
 	throw new Error(`Given range has no digits: ${range}`);
@@ -50,6 +52,7 @@ function previousRange(range) {
   * @param {string} b
   * @returns {boolean} */
 function sameDate(a, b) {
-	const d = /\d+/g;
-	return a.match(d)?.join("/") === b.match(d)?.join("/");
+	a = a.match(digits)?.join("/");
+	b = b.match(digits)?.join("/");
+	return a === b;
 }
