@@ -1,4 +1,4 @@
-const http = require("http");
+const https = require("https");
 const qs = require("querystring");
 
 const { MM_USER, MM_PASS } = require("./env");
@@ -14,7 +14,9 @@ module.exports = async (sessionId) => {
 	);
 };
 
-/** @returns {Promise<http.IncomingMessage>} */
+/** @typedef {import("http").IncomingMessage} IncomingMessage */
+
+/** @returns {Promise<IncomingMessage>} */
 function postCredentials() {
 	console.log("Logging in to", hostname);
 	const body = new URLSearchParams({
@@ -22,7 +24,7 @@ function postCredentials() {
 		password: MM_PASS,
 		login: "Log in",
 	});
-	const req = http.request({
+	const req = https.request({
 		hostname,
 		path: "/login.php",
 		method: "POST",
@@ -41,7 +43,7 @@ function postCredentials() {
 	});
 }
 
-/** @param {http.IncomingMessage} res
+/** @param {IncomingMessage} res
   * @returns {string[]} */
 function grabCookies(res) {
 	if (res.statusCode === 302) {
@@ -69,7 +71,7 @@ function findSessionId(cookies) {
   * @returns {Promise<string>} */
 function getData(sessionId) {
 	console.log("Fetching data using sid:", sessionId);
-	const req = http.request({
+	const req = https.request({
 		hostname,
 		path: "/get_data.php?" + qs.stringify({
 			"ms": 0,
