@@ -1,3 +1,41 @@
+# Updating src/trust.pem
+
+metalsmarket doesn't serve the entire certificate chain
+- intermediate certificates missing
+- Node.js error: UNABLE_TO_VERIFY_LEAF_SIGNATURE
+- TLS error: unable to verify the first certificate
+
+manually fetch the missing certs
+- fetch-certificate.sh
+	- downloads the metalsmarket certificate -> server.cert
+	- decodes and prints the issuer URL
+	- URL should point to a .crt file
+- fetch-issuer-pem.sh <url>
+	- downloads the issuer's .crt file (binary)
+	- converts to issuer.pem (text)
+	- contains intermediate certificate(s)
+
+if ok, move issuer.pem to src/trust.pem
+
+tell node.js:
+NODE_EXTRA_CA_CERTS=trust.pem
+
+
+# Certificate chain
+
+Server certificate - stores a certificate signed by intermediate.
+Intermediate certificate - stores a certificate signed by root.
+Root certificate - stores a self-signed certificate.
+Intermediate certificate should be installed on the server, along with the server certificate.
+Root certificates are embedded into the software applications, browsers and operating systems.
+
+The application serving the certificate has to send the complete chain, this
+means the server certificate itself and all the intermediates. The root certificate
+is supposed to be known by the client.
+
+
+# Scraping
+
 http://www.metalsmarket.net/get_data.php?ms=0&sid=<sid>&rand=<new Date().getTime()>
 
 sid = session id, obtained from login as cookie header
